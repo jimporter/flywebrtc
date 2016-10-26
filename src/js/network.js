@@ -42,21 +42,23 @@ navigator.publishServer('FlyWebRTC').then((server) => {
     console.log('onwebsocket');
 
     let socket = event.accept();
+    let conn = new RTCPeerConnection();
+    let channel = conn.createDataChannel('chat');
+    initDataChannel(channel);
+
     socket.onmessage = (event) => {
       let answer = new RTCSessionDescription(JSON.parse(event.data));
       conn.setRemoteDescription(answer);
     };
 
-    let conn = new RTCPeerConnection();
-    conn.onicecandidate = (event) => {
-      console.log('onicecandidate', event);
-      if (!event.candidate) {
-        socket.send(JSON.stringify(conn.localDescription));
-      }
+    socket.onopen = () => {
+      conn.onicecandidate = (event) => {
+        console.log('onicecandidate', event);
+        if (!event.candidate) {
+          socket.send(JSON.stringify(conn.localDescription));
+        }
+      };
     };
-
-    let channel = conn.createDataChannel('chat');
-    initDataChannel(channel);
 
     conn.createOffer().then((desc) => {
       return conn.setLocalDescription(desc);
