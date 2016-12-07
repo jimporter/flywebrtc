@@ -53,7 +53,7 @@ const clientURLMap = {
 
 let conn = new RTCPeerConnection();
 conn.ondatachannel = (event) => {
-  initDataChannel(event.channel);
+  chat.addDataChannel(event.channel);
 };
 
 navigator.publishServer('FlyWebRTC: XHR').then((server) => {

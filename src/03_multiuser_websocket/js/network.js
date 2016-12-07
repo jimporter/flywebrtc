@@ -24,7 +24,7 @@ function superfetch(url) {
   });
 }
 
-navigator.publishServer('FlyWebRTC').then((server) => {
+navigator.publishServer('FlyWebRTC: Multi-user').then((server) => {
   const clientURLMap = {
     '/js/network.js': '/js/network-client.js',
     '/': '/index.html',
@@ -41,6 +41,8 @@ navigator.publishServer('FlyWebRTC').then((server) => {
   let clients = new Map();
   clients.set(0, null);
   let nextClientId = 1;
+  chat.userId = 0;
+  chat.enable();
 
   server.onwebsocket = (event) => {
     console.log('onwebsocket');
@@ -49,7 +51,7 @@ navigator.publishServer('FlyWebRTC').then((server) => {
     let id = nextClientId++;
     socket.onopen = (event) => {
       socket.send(JSON.stringify({
-        event: 'connect', id: id, users: [...clients.keys()]
+        event: 'connect', userId: id, users: [...clients.keys()]
       }));
       clients.set(id, socket);
     };
@@ -65,7 +67,7 @@ navigator.publishServer('FlyWebRTC').then((server) => {
       if (dest === 0) {
         // It's a message for us!
         if (data.event === 'peerconnect') {
-          makeRightPeer(data.from, socket, data.desc).then((conn) => {
+          makeRightPeer(data.from, data.desc).then((conn) => {
             socket.send(JSON.stringify({
               event: 'peerconnect', from: 0, desc: conn.localDescription
             }));

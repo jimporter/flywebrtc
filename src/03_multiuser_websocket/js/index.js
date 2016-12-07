@@ -4,18 +4,37 @@ function Chat() {
 
   this._input.addEventListener('change', (event) => {
     let message = event.target.value;
-    this._addChatLine(message);
+    this._addChatLine('user ' + this.userId, message);
     event.target.value = '';
     event.target.dispatchEvent(new CustomEvent('message', {detail: message}));
   });
 }
 
 Chat.prototype = {
-  _addChatLine: function(message) {
-    this._chatlog.textContent += message + '\n';
+  userId: null,
+
+  _addChatLine: function(username, text) {
+    let line = document.createElement('div');
+    line.className = 'chat-line';
+
+    let author = document.createElement('span');
+    author.className = 'chat-author';
+    author.textContent = username;
+    line.appendChild(author);
+
+    let message = document.createElement('span');
+    message.className = 'chat-message';
+    message.textContent = ' ' + text;
+    line.appendChild(message);
+
+    this._chatlog.appendChild(line);
   },
 
-  addDataChannel: function(channel) {
+  enable: function() {
+    this._input.removeAttribute('disabled');
+  },
+
+  addDataChannel: function(userId, channel) {
     channel.onopen = (event) => {
       this._input.addEventListener('message', (event) => {
         channel.send(event.detail);
@@ -23,19 +42,19 @@ Chat.prototype = {
     };
 
     channel.onmessage = (event) => {
-      this._addChatLine(event.data);
+      this._addChatLine('user ' + userId, event.data);
     };
   }
 };
 
 let chat = new Chat();
 
-function makeLeftPeer(userId, socket) {
+function makeLeftPeer(userId) {
   return new Promise((resolve, reject) => {
     console.log('creating left RTCPeerConnection with user ' + userId);
     let conn = new RTCPeerConnection();
     let channel = conn.createDataChannel('chat');
-    chat.addDataChannel(channel);
+    chat.addDataChannel(userId, channel);
 
     conn.onicecandidate = (event) => {
       console.log('onicecandidate (initiator)', event);
@@ -50,13 +69,13 @@ function makeLeftPeer(userId, socket) {
   });
 }
 
-function finalizeLeftPeer(userId, conn, desc) {
+function finalizeLeftPeer(conn, userId, desc) {
   console.log('finalizing left RTCPeerConnection with user ' + userId);
   let remote = new RTCSessionDescription(desc);
   conn.setRemoteDescription(remote);
 }
 
-function makeRightPeer(userId, socket, desc) {
+function makeRightPeer(userId, desc) {
   return new Promise((resolve, reject) => {
     console.log('creating right RTCPeerConnection with user ' + userId);
     let conn = new RTCPeerConnection();
@@ -70,7 +89,7 @@ function makeRightPeer(userId, socket, desc) {
     };
 
     conn.ondatachannel = (event) => {
-      chat.addDataChannel(event.channel);
+      chat.addDataChannel(userId, event.channel);
     };
 
     conn.createAnswer().then((local) => {

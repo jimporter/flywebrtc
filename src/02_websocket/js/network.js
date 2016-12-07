@@ -24,7 +24,7 @@ function superfetch(url) {
   });
 }
 
-navigator.publishServer('FlyWebRTC').then((server) => {
+navigator.publishServer('FlyWebRTC: WebSocket').then((server) => {
   const clientURLMap = {
     '/js/network.js': '/js/network-client.js',
     '/': '/index.html',
@@ -44,7 +44,7 @@ navigator.publishServer('FlyWebRTC').then((server) => {
     let socket = event.accept();
     let conn = new RTCPeerConnection();
     let channel = conn.createDataChannel('chat');
-    initDataChannel(channel);
+    chat.addDataChannel(channel);
 
     socket.onmessage = (event) => {
       let answer = new RTCSessionDescription(JSON.parse(event.data));

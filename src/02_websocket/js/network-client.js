@@ -10,7 +10,7 @@ socket.onmessage = (event) => {
   };
 
   conn.ondatachannel = (event) => {
-    initDataChannel(event.channel);
+    chat.addDataChannel(event.channel);
   };
 
   let offer = new RTCSessionDescription(JSON.parse(event.data));

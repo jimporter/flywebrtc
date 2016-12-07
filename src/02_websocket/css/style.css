@@ -7,5 +7,25 @@ body {
 
 #chat-log {
   flex: 1;
-  white-space: pre;
+  overflow: auto;
+}
+
+#chat-log:empty::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  content: 'No messages!';
+}
+
+.chat-line {
+  padding: 0.25em;
+}
+
+.chat-line:not(:last-child) {
+  border-bottom: 1px solid lightgrey;
+}
+
+.chat-author {
+  font-weight: 800;
 }

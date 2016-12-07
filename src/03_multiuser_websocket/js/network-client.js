@@ -8,8 +8,11 @@ socket.onopen = (event) => {
     console.log('onmessage', data);
 
     if (data.event === 'connect') {
+      chat.userId = data.userId;
+      chat.enable();
+
       for (let userId of data.users) {
-        makeLeftPeer(userId, socket).then((conn) => {
+        makeLeftPeer(userId).then((conn) => {
           pendingPeers.set(userId, conn);
           socket.send(JSON.stringify({
             event: 'peerconnect', to: userId, desc: conn.localDescription
@@ -18,10 +21,10 @@ socket.onopen = (event) => {
       }
     } else if (data.event === 'peerconnect') {
       if (pendingPeers.has(data.from)) {
-        finalizeLeftPeer(data.from, pendingPeers.get(data.from), data.desc);
+        finalizeLeftPeer(pendingPeers.get(data.from), data.from, data.desc);
         pendingPeers.delete(data.from);
       } else {
-        makeRightPeer(data.from, socket, data.desc).then((conn) => {
+        makeRightPeer(data.from, data.desc).then((conn) => {
           socket.send(JSON.stringify({
             event: 'peerconnect', to: data.from, desc: conn.localDescription
           }));

@@ -1,6 +1,6 @@
 let conn = new RTCPeerConnection();
 let channel = conn.createDataChannel('chat');
-initDataChannel(channel);
+chat.addDataChannel(channel);
 
 function sendDescription(conn) {
   let desc = encodeURIComponent(JSON.stringify(conn.localDescription));
