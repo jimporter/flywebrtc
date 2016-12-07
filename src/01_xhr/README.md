@@ -23,14 +23,14 @@ Once the first side adds this description to *its* `RTCPeerConnection`, the
 connection is established and now you can send/receive data!
 
 Here's how this example handles the WebRTC signalling: in
-[js/network.js](`js/network.js`), the host first creates an `RTCPeerConnection`,
+[`js/network.js`](js/network.js), the host first creates an `RTCPeerConnection`,
 publishes its FlyWeb server, and waits for a client to connect to it. Once the
 client connects, they create their own `RTCPeerConnection` in
-[js/network-client.js](`js/network-client.js`) with a data channel and query
+[`js/network-client.js`](js/network-client.js) with a data channel and query
 `/api/signal?desc=<description>`, where *description* is the connection's local
 description for signalling purposes. The server receives this, creates an
 answer, and sends it to the client in the HTTP response body.
 
-In [index.js](`index.js`), we hook up the data channel to the UI so that, when
+In [`index.js`](index.js), we hook up the data channel to the UI so that, when
 the user sends a message, it gets passed through the data channel, and when we
 receive a message from that channel, it gets added to the chat log.
