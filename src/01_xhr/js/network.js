@@ -24,8 +24,8 @@ function signal(location, event) {
   // XXX: FlyWeb servers don't seem to support bodies in POST requests, so the
   // client sends its local WebRTC description via the query string.
   let query = new URLSearchParams(location.search);
-
   let offer = new RTCSessionDescription(JSON.parse(query.get('desc')));
+
   return new Promise((resolve, reject) => {
     conn.setRemoteDescription(offer).then(() => {
       return conn.createAnswer();
@@ -58,6 +58,9 @@ conn.ondatachannel = (event) => {
 
 navigator.publishServer('FlyWebRTC: XHR').then((server) => {
   server.onfetch = (event) => {
+    // This is a slightly-hokey trick to parse the URL we got while changing it
+    // as little as possible; unfortunately, the `URL` class makes this
+    // difficult to achieve, so we create an <a> element to do it.
     let url = event.request.url;
     let location = document.createElement('a');
     location.href = event.request.url;
