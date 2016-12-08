@@ -51,22 +51,25 @@ function signal(location, event) {
   return new Promise((resolve, reject) => {
     // Set the remote (client's) description and then create an answer for them.
     conn.setRemoteDescription(offer).then(() => {
+      console.log('creating WebRTC answer');
       return conn.createAnswer();
     }).then((answer) => {
+      console.log('created answer');
       return conn.setLocalDescription(answer);
-    });
+    }).catch((e) => console.error('failed to create answer', e));
 
     // Listen for ICE candidates (necessary even though we're not using
     // STUN/TURN servers), and once we're done (when `event.candidate` is null),
     // resolve the promise.
     conn.onicecandidate = (event) => {
-      console.log('onicecandidate', event);
+      console.log('conn.onicecandidate', event);
       if (!event.candidate)
         resolve();
     };
   }).then(() => {
     // Finally, resolve the promise with a response containing the JSON of the
     // host's WebRTC signalling description.
+    console.log('sending WebRTC description to client');
     return new Response(JSON.stringify(conn.localDescription), {
       headers: {'Content-Type': 'application/json'}
     });
@@ -86,6 +89,8 @@ const clientURLMap = {
 // Publish a FlyWeb server and wait for the Promise to resolve with the server
 // object.
 navigator.publishServer('FlyWebRTC: XHR').then((server) => {
+  console.log('created FlyWeb server');
+
   // Set up an event handler for whenever the client requests a URL from us.
   server.onfetch = (event) => {
     // This is a slightly-hokey trick to parse the URL we got while changing it
@@ -99,7 +104,7 @@ navigator.publishServer('FlyWebRTC: XHR').then((server) => {
     if (location.pathname in clientURLMap)
       url = clientURLMap[location.pathname];
 
-    console.log('onfetch', url, location.pathname);
+    console.log('server.onfetch', url, location.pathname);
     let response = (typeof url === 'function') ? url(location, event) :
                    superfetch(BASE_URL + url);
     event.respondWith(response);

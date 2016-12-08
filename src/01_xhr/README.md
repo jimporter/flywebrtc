@@ -1,4 +1,4 @@
-# FlyWeb Example 1: Signalling via XHR
+# FlyWebRTC Example 1: Signalling via XHR
 
 This example is an extremely-simple chat client for two users with messages
 going through a WebRTC data channel and the signalling handled by XHR
@@ -11,7 +11,7 @@ create a FlyWeb server. Once you accept, you can go to the FlyWeb section in
 your Hamburger menu and select "FlyWebRTC: XHR" to connect as a client to your
 server.
 
-## General design
+## Background
 
 In order to connect two devices via WebRTC, both sides must create an
 `RTCPeerConnection`, with one side creating some communication channels (audio,
@@ -21,6 +21,8 @@ and sends the description of it to its partner. The partner adds this
 description to its `RTCPeerConnection` and responds with an answer description.
 Once the first side adds this description to *its* `RTCPeerConnection`, the
 connection is established and now you can send/receive data!
+
+## General design
 
 Here's how this example handles the WebRTC signalling: in
 [`js/network.js`](js/network.js), the host first creates an `RTCPeerConnection`,

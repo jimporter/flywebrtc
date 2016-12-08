@@ -49,14 +49,17 @@ Chat.prototype = {
     // "message" events, which will get sent over the data channel to the other
     // side.
     channel.onopen = (event) => {
+      console.log('channel.onopen', event);
       this._input.removeAttribute('disabled');
       this._input.addEventListener('message', (event) => {
+        console.log('sending message over channel');
         channel.send(event.detail);
       });
     };
 
     // Listen for incoming messages and add them to the chat log.
     channel.onmessage = (event) => {
+      console.log('channel.onmessage', event);
       this._addChatLine('them', event.data);
     };
   }
