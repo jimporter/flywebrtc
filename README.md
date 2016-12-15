@@ -1,3 +1,7 @@
+previous | main | [next](src/01_xhr)
+
+---
+
 # FlyWebRTC
 
 This repository contains some examples of combining FlyWeb and WebRTC to handle
@@ -18,3 +22,7 @@ documentation](https://flyweb.github.io/#getting-started).
 ## License
 
 This project is licensed under the Mozilla Public License, version 2.0.
+
+---
+
+previous | main | [next](src/01_xhr)

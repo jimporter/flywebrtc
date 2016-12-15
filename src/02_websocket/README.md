@@ -1,3 +1,7 @@
+[previous](../01_xhr) | [main](../../README.md) | [next](../03_multiuser_websocket)
+
+---
+
 # FlyWebRTC Example 2: Signalling via WebSockets
 
 This example builds on the previous one: it's still a simple chat client for two
@@ -28,3 +32,7 @@ Identical to the previous example, in [`index.js`](index.js), we hook up the
 data channel to the UI so that, when the user sends a message, it gets passed
 through the data channel, and when we receive a message from that channel, it
 gets added to the chat log.
+
+---
+
+[previous](../01_xhr) | [main](../../README.md) | [next](../03_multiuser_websocket)

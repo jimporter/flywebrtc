@@ -1,3 +1,7 @@
+previous | [main](../../README.md) | [next](../02_websocket)
+
+---
+
 # FlyWebRTC Example 1: Signalling via XHR
 
 This example is an extremely-simple chat client for two users with messages
@@ -36,3 +40,7 @@ answer, and sends it to the client in the HTTP response body.
 In [`index.js`](index.js), we hook up the data channel to the UI so that, when
 the user sends a message, it gets passed through the data channel, and when we
 receive a message from that channel, it gets added to the chat log.
+
+---
+
+previous | [main](../../README.md) | [next](../02_websocket)

@@ -1,3 +1,7 @@
+[previous](../02_websocket) | [main](../../README.md) | next
+
+---
+
 # FlyWebRTC Example 3: Supporting Multiple Users
 
 This example is somewhat more realistic: now, instead of only supporting two
@@ -71,3 +75,7 @@ This message is sent in response to a [peer-connect](#peer-connect) message to
 finalize the RTC peer connection. It has one data attribute:
 
 * `desc`: The session description of the receiving side of the peer connection
+
+---
+
+[previous](../02_websocket) | [main](../../README.md) | next
